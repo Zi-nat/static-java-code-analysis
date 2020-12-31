@@ -1,4 +1,4 @@
-# static-java-code-analysis 
+# Static Java Code Analysis 
 
 __Abstract__
 
@@ -13,3 +13,14 @@ three categories; number of founded results; false positive results and duration
 The last motive is a suggestion for improvement. If it is determined that JCQL is no longer able to find
 errors at a certain level or if the rate of false positives is too high, it is necessary to present a number
 of possible solutions or suggestions for improvement.
+
+## Content
+
+This repository contains two folders:
+
+- [javaCode](javaCode): This folder is the list of known Java bugs
+- [jcqlCode](jcqlCode): This is the relevant `jcqlCode` that detects the Java bugs
+
+## How to run
+
+## Note

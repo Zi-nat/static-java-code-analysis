@@ -1,0 +1,16 @@
+«query dereferencedVariableIsAlwaysNull(show $BadAssign)
+	severity: error
+	category: "JCQL: Correctness"
+	description: "Dereferenced variable is always null"
+	/*A parameter to this method has been identified as a value that
+	 *should always be checked to see whether or not it is null, but it
+	 *is being dereferenced without a preceding null check
+	 */ 
+	
+	 «statement $BadAssign::=
+	     «case If00: if( #Var == null && #Var.length()== 0)$_» 
+	     «case If01: if( #Var != null || #Var.length()> 0)$_»
+	     «case If02: if( #Var != null || !#Var.exists())$_»
+	 »
+	 
+»	 

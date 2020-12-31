@@ -1,0 +1,42 @@
+«query deadStoreDueToSwitchStatement(show $FallingThrough)
+	severity: warning
+	category: "JCQL: Correctness"
+	description: "A case statement that does not contain a break statement allows execution to fall through to the next case which may not be intended"
+    /*When the execution is not explicitly terminated at the end of a switch case, it continues
+     *to execute the statements of the following case. While this is sometimes intentional,
+     *it often is a mistake which leads to unexpected behavior.
+     */
+
+
+
+     «statement $Switch ::= 
+     	switch ($_) {
+     		// This does not work: You are matching all switch labels before the $FallThrough one, which is why line 20 is marked twice and line 22 is marked thrice
+     		// Instead you want to match the **last** switch label before $FallThrough and mark this one
+     		// case $_:
+     		
+     		// This switch label is missing a break/continue/return
+     		«statement $FallingThrough ::= case $_:»
+     		«empty»
+     		$*InBetween
+     		«empty»
+     		// This is the switch label we fall into
+     		case $_:
+     	}
+     	
+     	// Between the two switch labels there is at least 1 statement and no other switch labels/break/continue/return
+     	«constraint $*InBetween.size() > 0 && !(caseOrStopInSwitch($Switch, $CaseOrStop) && contains($*InBetween, $CaseOrStop))»
+    »
+»
+
+«query caseOrStopInSwitch($Switch, $CaseOrStop) 
+    «statement $CaseOrStop ::=
+     	«case Case: case $_:»
+		«case Break: break;»
+		«case Return: return;»
+		«case Continue: continue;»
+		
+		// Just for performance
+		«constraint $CaseOrStop.parent == $Switch»
+	»
+»

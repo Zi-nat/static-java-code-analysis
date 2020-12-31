@@ -1,0 +1,23 @@
+«query comparisonOfNarrowTypeWithWideType(show $Loop)
+	severity: warning
+	category: "JCQL: Correctness"
+	description: "A potentially infinite loop"
+	/*In this example, bytesReceived is compared against MAXGET
+	 * in a while loop. However, bytesReceived is a short, and
+	 * MAXGET is a long. Because MAXGET is larger than Short.MAX_VALUE,
+	 * the loop condition is always true, so the loop never terminates.
+	 */
+
+    «type $Integer::= Integer»
+    «type $Long::= Long»
+    «type $Short::= Short»
+	
+	«statement $Loop ::=
+		
+		«case If:        if (#A<#B) $_»
+		«case While:     while (#A<#B) $_»
+		«case DoWhile:   do $_ while (#A<#B);»
+	»
+	«constraint $A.type.isSubtypeOf($Short)»
+	«constraint $B.type.isSubtypeOf($Long || $Integer)»
+» 

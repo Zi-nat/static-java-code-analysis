@@ -1,0 +1,38 @@
+«query dereferencedExpressionMaybeNull(show $BadReturn1)
+	severity: warning
+	category: "JCQL: Correctness"
+	description: "Dereferencing an expression whose value is null may cause a NullPointerException"
+	/*A parameter to this method has been identified as a value that
+	 *should always be checked to see whether or not it is null, but it
+	 *is being dereferenced without a preceding null check
+	 */ 
+	«type $Integer ::= Integer» 
+ 
+    «method $Method ::=
+            int #Method($*_) {*
+             «statement $BadReturn1 ::=
+               return #Var;
+             »
+           *}
+   »
+   «constraint $Var.type.isSubtypeOf($Integer)»
+  
+   
+»  
+
+«query dereferencedExpressionMaybeNull($BadReturn2)   
+ 
+    «type $Object::= Object»
+    «method $Method ::=
+            void #Method(#Var1 #_) {*
+             «statement $BadReturn2 ::=
+                  if(#_ == null)$_
+                  
+             »
+           *}
+   »
+    «constraint $Var1.isSubtypeOf($Object)»
+  
+»	
+
+

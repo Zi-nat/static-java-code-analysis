@@ -1,0 +1,35 @@
+«query cloneMethod(show $Clone)
+	severity:    warning
+	category:    "JCQL: Bad_Practice"
+	description: "clone method does not call super.clone()"
+	/*This non-final class defines a clone() method that does not call super.clone().
+	 *     ^^^^^^^^^
+	 * If this class ("A") is extended by a subclass ("B"), and the subclass B calls super.clone(),
+	 * then it is likely that B's clone() method will return an object of type A,
+	 * which violates the standard contract for clone().
+	 * If all clone() methods call super.clone(), then they are guaranteed to use Object.clone(),
+	 * which always returns an object of the correct type.
+	 */
+	
+	// Must use an explicit template to add a constraint
+	«class $_ ::=
+	 
+	 	// Modifiers are matched using a NAME list-MV (#*)
+		#*Modifiers class #Type {
+			«method $Clone ::=
+				#Type clone() $_
+		 	»
+		}
+		
+		// Modifier list must not contain "final"
+		«constraint !contains(#*Modifiers, "final")»
+	»
+	
+	// Must match the expression separately, since the body of a method must contain statements, not expressions
+	«no expression $SuperCloneCall ::= 
+		super.clone()
+	 	
+	 	// Enclosing method must not be the clone method we matched above
+	 	«constraint $SuperCloneCall.encl == $Clone» 	 	
+	»
+»

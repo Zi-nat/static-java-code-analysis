@@ -1,0 +1,16 @@
+« query optionalEmpty(show $CallOfOpional) 
+    severity: warning  
+	category: "JCQL: Correctness"  
+	description: "Method with Optional return type returns explicit null"
+	/*The usage of Optional return type (java.util.Optional or com.google.common.base.Optional)
+	 *always means that explicit null returns were not desired by design.
+	 *Returning a null value in such case is a contract violation and will most likely break client code.
+     */ 
+    
+    «statement $Var ::= 
+   		#_ #Var = Optional.empty();
+   	»
+    
+    «expression $CallOfOpional ::= #Var == null »
+     
+»

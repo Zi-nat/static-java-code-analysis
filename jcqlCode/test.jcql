@@ -1,0 +1,20 @@
+«query asdasc()
+     «statement $Switch ::= 
+     	switch ($_) {
+     		// This does not work: You are matching all switch labels before the $FallThrough one, which is why line 20 is marked twice and line 22 is marked thrice
+     		// Instead you want to match the **last** switch label before $FallThrough and mark this one
+     		// case $_:
+     		«statement $Ad::=  »
+     		// This switch label is missing a break/continue/return
+ //    		«statement $FallingThrough ::= case $_:»
+     		«empty»
+     		$*InBetween
+     		«empty»
+     		// This is the switch label we fall into
+     		case $_:
+     	}
+     	
+     	// Between the two switch labels there is at least 1 statement and no other switch labels/break/continue/return
+     	«constraint $*InBetween.size() > 0 && !(caseOrStopInSwitch($Switch, $CaseOrStop) && contains($*InBetween, $CaseOrStop))»
+    »
+»

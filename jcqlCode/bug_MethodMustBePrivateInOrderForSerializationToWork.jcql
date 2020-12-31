@@ -1,0 +1,30 @@
+«query methodMustBePrivate(show $StaticMethod)
+	severity: warning
+	category: "JCQL: Correctness"
+	description: "method must be private in order for Serialization to work"
+	/*This class implements the Serializable interface, and defines a method for custom 
+	 *serialization/deserialization. But since that method isn't declared private,
+	 *it will be silently ignored by the serialization/deserialization API.
+	 * 
+	 */
+	 
+	 «signature $MethodPub ::=
+	             static #_ #_()»
+	 
+	 class #_ implements Serializable{
+	 	
+	 	«method $StaticMethod ::=  $MethodPub throws ObjectStreamException{} » 
+	 	
+//	 	«method $MethodPub ::= 
+//                    public #_ #_(){}
+//        »
+//        «method $ReadObject ::=
+//                   void readObject(#_ #_){}
+//        »
+//        «method $WriteObject ::=
+//                   void writeObject(#_ #_){}
+//        »        
+        
+        
+	 }
+»

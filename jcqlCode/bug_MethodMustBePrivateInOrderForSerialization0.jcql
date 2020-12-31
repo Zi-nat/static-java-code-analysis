@@ -1,0 +1,22 @@
+«query methodMustBePrivate0(show $MethodPub)
+	severity: warning
+	category: "JCQL: Correctness"
+	description: "method must be private in order for Serialization to work"
+	/*This class implements the Serializable interface, and defines a method for custom 
+	 *serialization/deserialization. But since that method isn't declared private,
+	 *it will be silently ignored by the serialization/deserialization API.
+	 * 
+	 */
+	 
+
+	  //is it better to classified methods(like the following in separate query) or not?       
+	 
+	 class #_ implements Serializable{
+	 	
+	 	«method $MethodPub ::= 
+                    public #_ #_(){}
+        »
+            
+       
+	 }
+»

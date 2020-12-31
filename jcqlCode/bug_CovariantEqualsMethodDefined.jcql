@@ -1,0 +1,26 @@
+«query covariantEqualsMethodDefined(show $If)
+	severity: warning
+	category: "JCQL: Correctness"
+	description: "Covariant equals() method has been defined,but it inherits Object.equals(Object)"
+	/*This class defines a covariant version of the equals() method, but inherits the normal
+     *equals(Object) method defined in the base java.lang.Object class.Non final classes shouldn't
+     *use a hardcoded class name in the equals method because doing so breaks the method for subclasses.
+     *Instead, make the comparison dynamic.
+     */ 
+
+     class #_ extends #_{
+	     «method $Equals ::=
+	
+		       public boolean #Equals(Object #_){
+		  	 
+		          «statement $If ::=
+		             «case If: if ((* $_class == #_.getClass()*)){$_}»
+
+		          »
+		    
+		       }	  
+          »
+     }   
+	
+
+»

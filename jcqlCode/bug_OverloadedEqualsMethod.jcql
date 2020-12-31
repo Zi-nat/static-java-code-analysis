@@ -1,0 +1,17 @@
+«query overloadedEqualsMethod(show $Equals)
+	severity: error
+	category: "JCQL: Correctness"
+	description: "an equals method whose parameter type is not Object"
+	/*Classes that define an equals method whose parameter type is not Object overload
+     *the Object.equals method instead of overriding it. This may not be intended.
+     */
+
+     
+     class #Class {
+     	
+     	«signature $Equals ::=  public boolean equals(#Class)»
+
+     }
+
+ 
+»     

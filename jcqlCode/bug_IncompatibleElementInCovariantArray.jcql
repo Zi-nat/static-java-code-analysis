@@ -1,0 +1,39 @@
+«query incompatibleElementInCovariantArray(show $BadAssign)
+	severity: error
+	category: "JCQL: Correctness"
+	description: "incompatible Element in Covariant Array"
+	/*Value is stored into the array and the value type
+	 *doesn't match the array type. It's known from the analysis
+	 *that actual array type is narrower than the declared type of
+	 *its variable or field and this assignment doesn't satisfy the original array type.
+	 *This assignment may cause ArrayStoreException at runtime.
+	 */ 
+    class #_{
+	   void #_($*_){
+		 «statement $Bad::=
+		 #Obj[] #Bad= new #Obj[#_];
+		 /*On March 2nd, 2020 Lars Reimann pushed two bug fixes in the repository, which allow us to have
+		  * String[] a = new String[1]; 
+		  * && 
+		  * Object[] b = a;
+		  */
+		 »
+		 
+         «statement $BadAssign::=
+         #_[] #BadAssign = #Bad;»
+
+	    /*bad assignment( b[0] = 1;) should be implemented in this position,
+	     *witch is now impossible because lacking of data flow. 
+	     *And currently there must always be a Java variable-name or a JCQL name-variable on the left side.
+	     *
+	     */	
+		 
+	   }
+	
+	}	 
+	 
+
+»	 
+
+  	 
+	 

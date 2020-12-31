@@ -1,0 +1,28 @@
+«query equalsMethodAlwaysReturnsTrue(show $ClassB,$EqualsMethod)
+	severity: warning
+	category: "JCQL: Correctness"
+	description: "Inherited equals() in subclass with added fields"
+	/*If a class overrides 'Object.equals', and a subclass defines additional fields
+	 *to those it inherits but does not re-define 'equals', the results of 'equals' may be wrong.
+	 */
+	 
+	 class #ClassA {
+	 	
+	 	public int hashCode(){}
+	 	public boolean equals(Object #_){}
+	 	
+	 }
+	 
+	 class #ClassB extends #ClassA{
+	 	
+	 	«no signature $EqualsMethod::= 
+	 	    public boolean equals(#_)
+	 	»
+	 	
+	 }
+	 
+	 
+	 
+	 
+	 
+»

@@ -1,0 +1,27 @@
+«query equalsMethodAlwaysReturnsFalse(show $BadReturn)
+	severity: warning
+	category: "JCQL: Correctness"
+	description: "This class defines an equals method that always returns false. "
+	/*This means that an object is not equal to itself, and it is impossible to create
+	 *useful Maps or Sets of this class. More fundamentally, it means that equals is
+	 *not reflexive, one of the requirements of the equals method. 
+	 */
+	 
+	
+ 	
+	«method $Equals ::=
+	 	public boolean #Equals(Object #_){
+	 		
+	 		«statement $EqualsMethod ::=
+	 	         «case IF1: if ((*$_ != this *))$_»
+	 	         «case IF2: if ((*this != $_ *))$_»
+
+	 	    »
+	 	    «statement $BadReturn::= 
+	 	          return false;»
+	 	}
+	 	
+	»
+	 	
+	 
+»

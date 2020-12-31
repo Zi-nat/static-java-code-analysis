@@ -1,0 +1,74 @@
+«query collectionIsAddedtoCollection(show $Call)
+	severity: warning
+	category: "JCQL: Correctness"
+	description: "A collection is added to another collection"
+	/* This is not a bug but just a code comprehension query!
+	 */
+	 
+	«type $Collection ::= Collection»
+
+	«expression $Call ::= $Receiver.add($Argument)»
+
+	«constraint	 $Receiver.type.rawType.isSubtypeOf($Collection)
+			&&   related_types($Receiver.type.typeParams, $Argument.type)
+	»
+»
+ 
+«query related_types($Type1, $Type2)
+
+	«constraint	$Type1.isSubtypeOf($Type2)
+			||  $Type2.isSubtypeOf($Type1)
+	»
+» 
+
+
+/*****************************************************/
+«query collectionIsAddedtoItselfSimple(show $Call)
+	severity: warning
+	category: "JCQL: Correctness"
+	description: "A collection is added to itself"
+	/* A collection is added to itself. <-- Really the same OBJECT.
+	 * As a result, computing the hashCode of this set
+	 * will throw a StackOverflowException.
+	 * Here, we just detect the problem, if the receiver and the
+	 * argument of the call to add are references to the same variable.
+	 */
+	 
+	«type $Collection ::= Collection»
+
+	«expression $Call ::= $Receiver.add($Argument)»
+
+	«constraint	 $Receiver.type.rawType.isSubtypeOf($Collection)
+			&&   related_types($Receiver.type.typeParams, $Argument.type)
+			&&   $Receiver.ref == $Argument.ref				
+	»
+»
+
+/*****************************************************/
+«query collectionIsAddedtoItself(show $Call)
+	severity: warning
+	category: "JCQL: Correctness"
+	description: "A collection is added to itself"
+	/* A collection is added to itself. <-- Really the same OBJECT.
+	 * As a result, computing the hashCode of this set
+	 * will throw a StackOverflowException
+	 * Here, we use dataflow / pointsTo analysis to detect more
+	 * complex problem scenarios, e.g. mutual reference of two
+	 * collections to each other.
+	 */
+	 
+	«type $Collection ::= Collection»
+
+	«expression $Call ::= $Receiver.add($Argument)»
+
+	«constraint	 $Receiver.type.rawType.isSubtypeOf($Collection)
+			&&   related_types($Receiver.type.typeParams, $Argument.type)
+			/*At this point, an appropriate element from JTrasformer might be
+			 * needed to test reference variables for equality.
+			 * &&   PointsTo($Receiver, $PTSet_of_Rec)
+			 * &&   PointsTo($Argument, $PTSet_of_Rec)
+			 * &&  !disjoint($PTSet_of_Rec, $PTSet_of_Rec)
+			 */
+				
+	»
+»
